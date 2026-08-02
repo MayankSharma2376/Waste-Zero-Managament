@@ -23,7 +23,7 @@ const { app, server } = require("../socket/socket.js");
 
 app.use(cors({
   
-  origin: ['http://localhost:5173', 'http://localhost:5174'], 
+  origin: process.env.CLIENT_URL, 
   credentials: true 
 }));
 

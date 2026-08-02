@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const baseURL = import.meta?.env?.VITE_API_URL;
+console.log("Base Url", baseURL)
 
 const api = axios.create({
   baseURL, // configurable via VITE_API_BASE_URL
