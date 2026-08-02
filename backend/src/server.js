@@ -21,11 +21,41 @@ const connectDb = require('../lib/connectDb.js');
 const { app, server } = require("../socket/socket.js");
 
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://waste-zero-managament.vercel.app"
+];
+
 app.use(cors({
-  
-  origin: process.env.CLIENT_URL, 
-  credentials: true 
+  origin: function (origin, callback) {
+    console.log("Origin:", origin);
+
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    callback(new Error(`Origin ${origin} not allowed by CORS`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
+
+
+
+
+
+
+// app.use(cors({
+//   origin: process.env.CLIENT_URL, 
+//   credentials: true,
+//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization"]
+// }));
 
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
@@ -64,3 +94,6 @@ server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   connectDb();
 });
+
+
+console.log("Client Url : ", process.env.CLIENT_URL)
